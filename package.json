@@ -1,0 +1,20 @@
+{
+  "name": "siren-hosting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "@whiskeysockets/baileys": "^6.7.24",
+    "express": "^5.3.0",
+    "pino": "^10.4.0"
+  }
+}

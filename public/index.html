@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIREN D MD HOSTING</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:white;font-family:Arial;padding:25px 15px}
+.container{max-width:440px;margin:45px auto}
+.header{text-align:center;margin-bottom:25px}
+.logo{font-size:30px;font-weight:bold;color:#28dba0;letter-spacing:2px}
+p{color:#8994a8}
+.card{background:#111a2b;border:1px solid #24334b;border-radius:16px;padding:24px}
+input{width:100%;padding:14px;margin:10px 0;background:#091222;color:white;border:1px solid #30415d;border-radius:8px}
+button{width:100%;padding:14px;margin-top:12px;background:#20c997;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+.secondary{background:#30415d;color:white}
+.status{text-align:center;margin-top:15px;font-size:13px;color:#28dba0}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="logo">SIREN D MD</div>
+<p>WhatsApp Bot Hosting Dashboard</p>
+</div>
+
+<div class="card" id="auth">
+<h2 id="heading">Create account</h2>
+<p>Register or log in to access your dashboard.</p>
+<input id="email" type="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password">
+<button id="signup">CREATE ACCOUNT</button>
+<button id="login" class="secondary">LOGIN</button>
+<div class="status" id="status"></div>
+</div>
+
+<div class="card hidden" id="dashboard">
+<h2>Welcome to SIREN D MD</h2>
+<p id="user"></p>
+<p>Your account is connected.</p>
+<hr>
+<h3>WhatsApp Hosting</h3>
+<p>Pairing backend is not connected yet.</p>
+<button id="logout" class="secondary">LOG OUT</button>
+<div class="status" id="dashstatus"></div>
+</div>
+</div>
+
+<script type="module">
+import { createClient } from
+"https://esm.sh/@supabase/supabase-js@2";
+import { SUPABASE_URL, SUPABASE_KEY } from "./supabase-config.js";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const status = document.getElementById("status");
+const auth = document.getElementById("auth");
+const dashboard = document.getElementById("dashboard");
+
+async function showSession() {
+  const { data } = await supabase.auth.getSession();
+  const session = data.session;
+
+  auth.classList.toggle("hidden", !!session);
+  dashboard.classList.toggle("hidden", !session);
+
+  if (session) {
+    document.getElementById("user").textContent =
+      "Logged in as " + session.user.email;
+  }
+}
+
+document.getElementById("signup").onclick = async () => {
+  status.textContent = "Creating account...";
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const { error, data } = await supabase.auth.signUp({
+    email, password
+  });
+
+  if (error) {
+    status.textContent = error.message;
+    return;
+  }
+
+  status.textContent = data.session
+    ? "Account created successfully!"
+    : "Check your email to confirm your account.";
+
+  await showSession();
+};
+
+document.getElementById("login").onclick = async () => {
+  status.textContent = "Logging in...";
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email, password
+  });
+
+  if (error) {
+    status.textContent = error.message;
+    return;
+  }
+
+  status.textContent = "";
+  await showSession();
+};
+
+document.getElementById("logout").onclick = async () => {
+  await supabase.auth.signOut();
+  document.getElementById("dashstatus").textContent = "Logged out.";
+  await showSession();
+};
+
+supabase.auth.onAuthStateChange(() => showSession());
+showSession();
+</script>
+</body>
+</html>
