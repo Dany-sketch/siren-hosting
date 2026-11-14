@@ -42,7 +42,7 @@ button{width:100%;padding:14px;margin-top:12px;background:#20c997;border:0;borde
 <p>Your account is connected.</p>
 <hr>
 <h3>WhatsApp Hosting</h3>
-<p>Pairing backend is not connected yet.</p>
+<p id="backendstatus">Checking backend connection...</p>
 <button id="logout" class="secondary">LOG OUT</button>
 <div class="status" id="dashstatus"></div>
 </div>
@@ -58,6 +58,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const status = document.getElementById("status");
 const auth = document.getElementById("auth");
 const dashboard = document.getElementById("dashboard");
+const backendStatus = document.getElementById("backendstatus");
+const BACKEND_URL = "https://siren-hosting.onrender.com";
 
 async function showSession() {
   const { data } = await supabase.auth.getSession();
@@ -69,6 +71,26 @@ async function showSession() {
   if (session) {
     document.getElementById("user").textContent =
       "Logged in as " + session.user.email;
+
+    backendStatus.textContent = "Connecting to backend...";
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/me`, {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Backend connection failed");
+      }
+
+      backendStatus.textContent = "Backend connected successfully!";
+    } catch (error) {
+      backendStatus.textContent = error.message;
+    }
   }
 }
 

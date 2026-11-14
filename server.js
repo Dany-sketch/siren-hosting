@@ -1,8 +1,13 @@
 import express from "express";
+import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: "https://siren-d-md-hosting.vercel.app"
+}));
 
 app.use(express.json());
 
@@ -30,7 +35,6 @@ app.get("/api/me", async (req, res) => {
   }
 
   const token = authorization.slice(7);
-
   const { data, error } = await supabase.auth.getUser(token);
 
   if (error || !data.user) {
