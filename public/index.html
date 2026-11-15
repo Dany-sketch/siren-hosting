@@ -3,144 +3,421 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SIREN D MD HOSTING</title>
+<title>SIREN D MD | Hosting Dashboard</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:white;font-family:Arial;padding:25px 15px}
-.container{max-width:440px;margin:45px auto}
+body{
+  margin:0;
+  padding:20px;
+  background:#080d18;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+.container{max-width:520px;margin:35px auto}
 .header{text-align:center;margin-bottom:25px}
-.logo{font-size:30px;font-weight:bold;color:#28dba0;letter-spacing:2px}
-p{color:#8994a8}
-.card{background:#111a2b;border:1px solid #24334b;border-radius:16px;padding:24px}
-input{width:100%;padding:14px;margin:10px 0;background:#091222;color:white;border:1px solid #30415d;border-radius:8px}
-button{width:100%;padding:14px;margin-top:12px;background:#20c997;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+.logo{
+  font-size:32px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:#20d6a0;
+}
+.subtitle{color:#8b98ad}
+.card{
+  background:#111a2b;
+  border:1px solid #263650;
+  border-radius:16px;
+  padding:23px;
+  margin-bottom:18px;
+}
+h2,h3{margin-top:0}
+p{color:#9aa8bd;line-height:1.5}
+input{
+  width:100%;
+  padding:14px;
+  margin:9px 0;
+  background:#091222;
+  border:1px solid #30415d;
+  border-radius:9px;
+  color:white;
+  font-size:15px;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:11px;
+  border:0;
+  border-radius:9px;
+  background:#20c997;
+  color:#06130f;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#30415d;color:white}
-.status{text-align:center;margin-top:15px;font-size:13px;color:#28dba0}
-.hidden{display:none}
+.hidden{display:none!important}
+.status{
+  margin-top:14px;
+  text-align:center;
+  font-size:14px;
+  color:#20d6a0;
+  overflow-wrap:anywhere;
+}
+.badge{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:20px;
+  background:#173b35;
+  color:#42e6b2;
+  font-size:12px;
+}
+.code{
+  padding:20px;
+  margin-top:15px;
+  text-align:center;
+  font-size:27px;
+  font-weight:bold;
+  letter-spacing:5px;
+  background:#071321;
+  border:1px dashed #20c997;
+  border-radius:10px;
+  color:#20d6a0;
+}
+.instructions{
+  background:#0a1424;
+  border-radius:10px;
+  padding:14px;
+  color:#aab7ca;
+  font-size:13px;
+  line-height:1.8;
+}
+hr{border:0;border-top:1px solid #263650;margin:20px 0}
+.footer{text-align:center;color:#64738a;font-size:12px;margin-top:25px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header class="header">
+  <div class="logo">SIREN D MD</div>
+  <p class="subtitle">WhatsApp Bot Hosting Dashboard</p>
+  <span class="badge">PERSONAL BOT HOSTING</span>
+</header>
+
+<section class="card" id="auth">
+  <h2 id="authHeading">Welcome</h2>
+  <p>Register or log in to access your dashboard.</p>
+
+  <input id="email" type="email" placeholder="Email address" autocomplete="email">
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+
+  <button id="signup">CREATE ACCOUNT</button>
+  <button id="login" class="secondary">LOGIN</button>
+
+  <div class="status" id="authStatus"></div>
+</section>
+
+<section class="hidden" id="dashboard">
+
+  <div class="card">
+    <h2>Dashboard</h2>
+    <p>Welcome, <span id="userEmail"></span></p>
+    <p>Backend:
+      <span class="badge" id="backendStatus">Checking...</span>
+    </p>
+    <p>Account:
+      <span class="badge" id="ownerStatus">Checking...</span>
+    </p>
+  </div>
+
+  <div class="card hidden" id="pairCard">
+    <h3>WhatsApp Connection</h3>
+    <p>Connect your own WhatsApp account using a pairing code.</p>
+
+    <label for="phone">WhatsApp number with country code</label>
+    <input id="phone" type="tel" placeholder="+2547XXXXXXXX">
+
+    <button id="pairButton">GENERATE PAIRING CODE</button>
+
+    <div id="pairCode" class="hidden">
+      <p>Your WhatsApp pairing code:</p>
+      <div class="code" id="codeText"></div>
+      <div class="instructions">
+        1. Open WhatsApp on your phone.<br>
+        2. Open Settings or the menu.<br>
+        3. Select Linked devices.<br>
+        4. Select Link a device.<br>
+        5. Choose Link with phone number instead.<br>
+        6. Enter the code displayed above.
+      </div>
+    </div>
+
+    <hr>
+    <p>Connection status:</p>
+    <span class="badge" id="connectionStatus">Disconnected</span>
+    <button id="refreshStatus" class="secondary">REFRESH STATUS</button>
+    <div class="status" id="pairStatus"></div>
+  </div>
+
+  <div class="card hidden" id="notOwner">
+    <h3>Dashboard access</h3>
+    <p>This account can access the dashboard, but it is not authorised to control the personal WhatsApp bot.</p>
+  </div>
+
+  <div class="card">
+    <button id="logout" class="secondary">LOG OUT</button>
+    <div class="status" id="dashStatus"></div>
+  </div>
+
+</section>
+
+<div class="footer">SIREN D MD HOSTING · Secure Dashboard</div>
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { SUPABASE_URL, SUPABASE_KEY } from "./supabase-config.js";
+
+const BACKEND_URL = "https://siren-hosting.onrender.com";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+
+let currentSession = null;
+let isOwner = false;
+
+function message(id, text) {
+  $(id).textContent = text;
+}
+
+async function backendRequest(path, options = {}) {
+  if (!currentSession) throw
+wc -l public/index.html
+cd ~/siren-hosting
+
+cat > public/index.html <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIREN D MD Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:#080d18;color:#fff;font-family:Arial,sans-serif}
+.container{max-width:500px;margin:35px auto}
+header{text-align:center;margin-bottom:25px}
+.logo{font-size:32px;font-weight:900;letter-spacing:3px;color:#20d6a0}
+p{color:#9aa8bd;line-height:1.5}
+.card{background:#111a2b;border:1px solid #263650;border-radius:16px;padding:22px;margin-bottom:18px}
+input{width:100%;padding:14px;margin:9px 0;background:#091222;border:1px solid #30415d;border-radius:9px;color:white;font-size:15px}
+button{width:100%;padding:14px;margin-top:11px;border:0;border-radius:9px;background:#20c997;color:#06130f;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+.secondary{background:#30415d;color:white}
+.hidden{display:none!important}
+.status{margin-top:14px;text-align:center;color:#20d6a0;overflow-wrap:anywhere}
+.badge{display:inline-block;padding:7px 12px;border-radius:20px;background:#173b35;color:#42e6b2;font-size:12px}
+.code{padding:20px;margin:15px 0;text-align:center;font-size:28px;font-weight:bold;letter-spacing:5px;background:#071321;border:1px dashed #20c997;border-radius:10px;color:#20d6a0}
+.instructions{background:#0a1424;border-radius:10px;padding:14px;color:#aab7ca;font-size:13px;line-height:1.8}
+.footer{text-align:center;color:#64738a;font-size:12px;margin-top:25px}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="header">
+<header>
 <div class="logo">SIREN D MD</div>
 <p>WhatsApp Bot Hosting Dashboard</p>
-</div>
+<span class="badge">PERSONAL BOT HOSTING</span>
+</header>
 
-<div class="card" id="auth">
-<h2 id="heading">Create account</h2>
+<section class="card" id="auth">
+<h2>Welcome</h2>
 <p>Register or log in to access your dashboard.</p>
 <input id="email" type="email" placeholder="Email address">
 <input id="password" type="password" placeholder="Password">
 <button id="signup">CREATE ACCOUNT</button>
 <button id="login" class="secondary">LOGIN</button>
-<div class="status" id="status"></div>
+<div class="status" id="authStatus"></div>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2>Dashboard</h2>
+<p>Account: <span id="userEmail"></span></p>
+<p>Backend: <span class="badge" id="backendStatus">Checking...</span></p>
+<p>Permission: <span class="badge" id="ownerStatus">Checking...</span></p>
 </div>
 
-<div class="card hidden" id="dashboard">
-<h2>Welcome to SIREN D MD</h2>
-<p id="user"></p>
-<p>Your account is connected.</p>
-<hr>
-<h3>WhatsApp Hosting</h3>
-<p id="backendstatus">Checking backend connection...</p>
-<button id="logout" class="secondary">LOG OUT</button>
-<div class="status" id="dashstatus"></div>
+<div class="card hidden" id="pairCard">
+<h3>WhatsApp Connection</h3>
+<p>Connect your own WhatsApp account using a pairing code.</p>
+<input id="phone" type="tel" placeholder="Number with country code, e.g. +2547XXXXXXXX">
+<button id="pairButton">GENERATE PAIRING CODE</button>
+<div id="pairCode" class="hidden">
+<p>Your pairing code:</p>
+<div class="code" id="codeText"></div>
+<div class="instructions">
+1. Open WhatsApp on your phone.<br>
+2. Go to Settings or the menu.<br>
+3. Select Linked devices.<br>
+4. Select Link a device.<br>
+5. Choose Link with phone number instead.<br>
+6. Enter the pairing code shown above.
 </div>
+</div>
+<hr>
+<p>WhatsApp status: <span class="badge" id="connectionStatus">Disconnected</span></p>
+<button id="refreshStatus" class="secondary">REFRESH STATUS</button>
+<div class="status" id="pairStatus"></div>
+</div>
+
+<div class="card hidden" id="notOwner">
+<h3>Limited access</h3>
+<p>This account is not authorised to control the personal WhatsApp bot.</p>
+</div>
+
+<div class="card">
+<button id="logout" class="secondary">LOG OUT</button>
+<div class="status" id="dashStatus"></div>
+</div>
+</section>
+
+<div class="footer">SIREN D MD HOSTING</div>
 </div>
 
 <script type="module">
-import { createClient } from
-"https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { SUPABASE_URL, SUPABASE_KEY } from "./supabase-config.js";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const status = document.getElementById("status");
-const auth = document.getElementById("auth");
-const dashboard = document.getElementById("dashboard");
-const backendStatus = document.getElementById("backendstatus");
 const BACKEND_URL = "https://siren-hosting.onrender.com";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+let currentSession = null;
 
-async function showSession() {
-  const { data } = await supabase.auth.getSession();
-  const session = data.session;
+function show(id, value) {
+  $(id).textContent = value;
+}
 
-  auth.classList.toggle("hidden", !!session);
-  dashboard.classList.toggle("hidden", !session);
-
-  if (session) {
-    document.getElementById("user").textContent =
-      "Logged in as " + session.user.email;
-
-    backendStatus.textContent = "Connecting to backend...";
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/me`, {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Backend connection failed");
-      }
-
-      backendStatus.textContent = "Backend connected successfully!";
-    } catch (error) {
-      backendStatus.textContent = error.message;
+async function backendRequest(path, options = {}) {
+  if (!currentSession) throw new Error("Please log in again.");
+  const response = await fetch(BACKEND_URL + path, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + currentSession.access_token,
+      ...(options.headers || {})
     }
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(result.error || "Request failed.");
+  return result;
+}
+
+async function refreshStatus() {
+  try {
+    const result = await backendRequest("/api/whatsapp/status");
+    show("connectionStatus", result.status.toUpperCase());
+  } catch (error) {
+    show("connectionStatus", "UNAVAILABLE");
+    show("pairStatus", error.message);
   }
 }
 
-document.getElementById("signup").onclick = async () => {
-  status.textContent = "Creating account...";
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+async function openDashboard(session) {
+  currentSession = session;
+  $("auth").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  show("userEmail", session.user.email || "Account");
 
-  const { error, data } = await supabase.auth.signUp({
-    email, password
-  });
-
-  if (error) {
-    status.textContent = error.message;
-    return;
+  try {
+    const health = await fetch(BACKEND_URL + "/api/health");
+    if (!health.ok) throw new Error();
+    show("backendStatus", "ONLINE");
+  } catch {
+    show("backendStatus", "OFFLINE");
   }
 
-  status.textContent = data.session
-    ? "Account created successfully!"
-    : "Check your email to confirm your account.";
+  try {
+    const account = await backendRequest("/api/me");
+    const owner = account.isBotOwner === true;
+    show("ownerStatus", owner ? "OWNER ACCESS" : "STANDARD ACCESS");
+    $("pairCard").classList.toggle("hidden", !owner);
+    $("notOwner").classList.toggle("hidden", owner);
+    if (owner) await refreshStatus();
+  } catch (error) {
+    show("ownerStatus", "VERIFICATION FAILED");
+    show("dashStatus", error.message);
+  }
+}
 
-  await showSession();
-};
-
-document.getElementById("login").onclick = async () => {
-  status.textContent = "Logging in...";
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email, password
-  });
-
-  if (error) {
-    status.textContent = error.message;
+$("signup").onclick = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || password.length < 6) {
+    show("authStatus", "Enter an email and a password of at least 6 characters.");
     return;
   }
-
-  status.textContent = "";
-  await showSession();
+  show("authStatus", "Creating account...");
+  const {data, error} = await supabase.auth.signUp({email, password});
+  if (error) return show("authStatus", error.message);
+  if (data.session) await openDashboard(data.session);
+  else show("authStatus", "Account created. Confirm your email, then log in.");
 };
 
-document.getElementById("logout").onclick = async () => {
+$("login").onclick = async () => {
+  show("authStatus", "Logging in...");
+  const {data, error} = await supabase.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("password").value
+  });
+  if (error) return show("authStatus", error.message);
+  await openDashboard(data.session);
+};
+
+$("pairButton").onclick = async () => {
+  const phoneNumber = $("phone").value.trim();
+  if (!/^\+?\d{10,15}$/.test(phoneNumber)) {
+    show("pairStatus", "Enter a valid number with country code.");
+    return;
+  }
+  const button = $("pairButton");
+  button.disabled = true;
+  button.textContent = "GENERATING...";
+  $("pairCode").classList.add("hidden");
+  show("pairStatus", "Contacting WhatsApp service...");
+  try {
+    const result = await backendRequest("/api/whatsapp/pair", {
+      method: "POST",
+      body: JSON.stringify({phoneNumber})
+    });
+    show("codeText", result.pairingCode);
+    $("pairCode").classList.remove("hidden");
+    show("pairStatus", "Enter this code in WhatsApp Linked Devices.");
+    await refreshStatus();
+  } catch (error) {
+    show("pairStatus", error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "GENERATE PAIRING CODE";
+  }
+};
+
+$("refreshStatus").onclick = refreshStatus;
+
+$("logout").onclick = async () => {
   await supabase.auth.signOut();
-  document.getElementById("dashstatus").textContent = "Logged out.";
-  await showSession();
+  currentSession = null;
+  $("dashboard").classList.add("hidden");
+  $("auth").classList.remove("hidden");
+  $("pairCode").classList.add("hidden");
+  show("authStatus", "Logged out.");
 };
 
-supabase.auth.onAuthStateChange(() => showSession());
-showSession();
+const {data: {session}} = await supabase.auth.getSession();
+if (session) await openDashboard(session);
 </script>
 </body>
 </html>
